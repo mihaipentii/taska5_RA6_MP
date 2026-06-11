@@ -1,0 +1,26 @@
+name: Pipeline GitHub Actions (RA6)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del código fuente
+        uses: actions/checkout@v4
+
+      - name: Conexión SSH y reinicio de Apache
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "Conexión SSH establecida con éxito."
+            # Comando mínimo exigido por la práctica: reinicio del servicio Apache
+            sudo systemctl restart apache2
+            echo "Servidor Apache reiniciado."
